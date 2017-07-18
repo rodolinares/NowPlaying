@@ -83,14 +83,14 @@ namespace NowPlaying
 			}
 
 			//var info = trackInfo.Split('-');
-			var separators = new[] {" - "};
+			var separators = new[] { " - " };
 			var info = trackInfo.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 			return new Tuple<string, string>(info[0], info[1]);
 		}
 
 		private void Window_Deactivated(object sender, EventArgs e)
 		{
-			var window = (Window) sender;
+			var window = (Window)sender;
 			window.Topmost = true;
 		}
 	}

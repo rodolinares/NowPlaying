@@ -6,8 +6,8 @@
         mc:Ignorable="d"
         Title="Now Playing" Height="60" Width="200" ResizeMode="NoResize" Background="#FF282828" WindowStyle="None" Deactivated="Window_Deactivated">
 	<Grid>
-		<TextBlock x:Name="TbTitle" HorizontalAlignment="Left" Margin="60,10,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Foreground="White" Width="130"/>
-		<TextBlock x:Name="TbArtist" HorizontalAlignment="Left" Margin="60,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="DarkGray" Width="130" Text="Artist"/>
+		<TextBlock x:Name="TbTitle" HorizontalAlignment="Left" Margin="60,10,0,0" Text="Title" VerticalAlignment="Top" Foreground="White" Width="130" TextTrimming="CharacterEllipsis"/>
+		<TextBlock x:Name="TbArtist" HorizontalAlignment="Left" Margin="60,34,0,0" VerticalAlignment="Top" Foreground="DarkGray" Width="130" Text="Artist" TextTrimming="CharacterEllipsis"/>
 		<Image HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Source="Images/spotify.png" Margin="10,10,0,0"/>
 	</Grid>
 </Window>
