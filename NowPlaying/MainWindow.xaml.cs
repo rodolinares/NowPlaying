@@ -16,7 +16,7 @@ namespace NowPlaying
 			#region SetWindowPosition
 
 			Left = SystemParameters.PrimaryScreenWidth - Width - 20;
-			Top = SystemParameters.PrimaryScreenHeight - Height - 50;
+			Top = SystemParameters.PrimaryScreenHeight - Height - 70;
 
 			#endregion
 
@@ -77,12 +77,14 @@ namespace NowPlaying
 		{
 			var trackInfo = GetSpotifyTrackInfo();
 
-			if (!trackInfo.Contains('-'))
+			if (!trackInfo.Contains(" - "))
 			{
 				return null;
 			}
 
-			var info = trackInfo.Split('-');
+			//var info = trackInfo.Split('-');
+			var separators = new[] {" - "};
+			var info = trackInfo.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 			return new Tuple<string, string>(info[0], info[1]);
 		}
 
