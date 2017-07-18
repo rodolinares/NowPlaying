@@ -1,0 +1,12 @@
+﻿<Window x:Class="NowPlaying.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Now Playing" Height="60" Width="248" ResizeMode="NoResize" Background="#FF3E3E42" WindowStyle="None" Deactivated="Window_Deactivated">
+	<Grid Margin="0,0,-2,0" Width="250">
+		<TextBlock x:Name="TbTitle" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Foreground="White" Width="230"/>
+		<TextBlock x:Name="TbArtist" HorizontalAlignment="Left" Margin="10,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Gray" Width="230" Text="Artist"/>
+	</Grid>
+</Window>
