@@ -3,20 +3,25 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace NowPlaying
 {
 	public partial class MainWindow
 	{
+		private readonly RotateTransform _rotateTransform;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
+			_rotateTransform = new RotateTransform(0);
+
 			#region SetWindowPosition
 
-			Left = SystemParameters.PrimaryScreenWidth - Width - 20;
-			Top = SystemParameters.PrimaryScreenHeight - Height - 70;
+			Left = SystemParameters.PrimaryScreenWidth - Width - 30;
+			Top = SystemParameters.PrimaryScreenHeight - Height - 65; // 40
 
 			#endregion
 
@@ -24,7 +29,7 @@ namespace NowPlaying
 
 			var dispatcherTimer = new DispatcherTimer();
 			dispatcherTimer.Tick += DispatcherTimer_Tick;
-			dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+			dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
 			dispatcherTimer.Start();
 
 			#endregion
@@ -57,6 +62,8 @@ namespace NowPlaying
 
 			TbTitle.Text = info.Item2.TrimStart(' ');
 			TbArtist.Text = info.Item1.TrimEnd(' ');
+			_rotateTransform.Angle += 5f;
+			ImgIcon.RenderTransform = _rotateTransform;
 
 			CommandManager.InvalidateRequerySuggested();
 		}
