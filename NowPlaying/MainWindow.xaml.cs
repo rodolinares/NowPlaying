@@ -16,7 +16,11 @@ namespace NowPlaying
 		{
 			InitializeComponent();
 
+			#region IconSpin
+
 			_rotateTransform = new RotateTransform(0);
+
+			#endregion
 
 			#region SetWindowPosition
 
@@ -99,6 +103,11 @@ namespace NowPlaying
 		{
 			var window = (Window)sender;
 			window.Topmost = true;
+		}
+
+		private void MenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			Application.Current.Shutdown();
 		}
 	}
 }
