@@ -94,8 +94,8 @@ namespace NowPlaying
 			}
 
 			//var info = trackInfo.Split('-');
-			var separators = new[] { " - " };
-			var info = trackInfo.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+			var separator = new[] { " - " };
+			var info = trackInfo.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 			return new Tuple<string, string>(info[0], info[1]);
 		}
 
@@ -108,6 +108,14 @@ namespace NowPlaying
 		private void MenuItem_Click(object sender, RoutedEventArgs e)
 		{
 			Application.Current.Shutdown();
+		}
+
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.ChangedButton == MouseButton.Left)
+			{
+				DragMove();
+			}
 		}
 	}
 }
