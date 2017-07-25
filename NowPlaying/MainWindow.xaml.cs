@@ -33,7 +33,7 @@ namespace NowPlaying
 
 			var dispatcherTimer = new DispatcherTimer();
 			dispatcherTimer.Tick += DispatcherTimer_Tick;
-			dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+			dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
 			dispatcherTimer.Start();
 
 			#endregion
@@ -66,7 +66,7 @@ namespace NowPlaying
 
 			TbTitle.Text = info.Item2.TrimStart(' ');
 			TbArtist.Text = info.Item1.TrimEnd(' ');
-			_rotateTransform.Angle += 5f;
+			_rotateTransform.Angle += 2f;
 			ImgIcon.RenderTransform = _rotateTransform;
 
 			CommandManager.InvalidateRequerySuggested();
