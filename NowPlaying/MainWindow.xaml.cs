@@ -1,24 +1,50 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using SpotifyAPI.Local;
 
 namespace NowPlaying
 {
 	public partial class MainWindow
 	{
 		private readonly RotateTransform _rotateTransform;
+	    private static SpotifyLocalAPI _spotify;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			#region IconSpin
+		    #region Init Spotify
 
-			_rotateTransform = new RotateTransform(0);
+		    _spotify = new SpotifyLocalAPI();
+
+		    if (!SpotifyLocalAPI.IsSpotifyInstalled())
+		    {
+		        return;
+		    }
+
+		    if (!SpotifyLocalAPI.IsSpotifyRunning())
+		    {
+		        return;
+		    }
+
+		    if (!SpotifyLocalAPI.IsSpotifyWebHelperRunning())
+		    {
+		        return;
+		    }
+
+		    if (!_spotify.Connect())
+		    {
+		        return;
+		    }
+
+		    #endregion
+
+            #region IconSpin
+
+            _rotateTransform = new RotateTransform(0);
 
 			#endregion
 
@@ -36,67 +62,28 @@ namespace NowPlaying
 			dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
 			dispatcherTimer.Start();
 
-			#endregion
+            #endregion
 
-			#region SetInitialInfo
+            #region SetInitialInfo
 
-			var info = GetTitleAndArtist();
+		    var status = _spotify.GetStatus();
+		    TbTitle.Text = status.Track.TrackResource.Name;
+		    TbArtist.Text = status.Track.ArtistResource.Name;
 
-			if (info == null)
-			{
-				return;
-			}
+            //CommandManager.InvalidateRequerySuggested();
 
-			TbTitle.Text = info.Item2.TrimStart(' ');
-			TbArtist.Text = info.Item1.TrimEnd(' ');
-
-			//CommandManager.InvalidateRequerySuggested();
-
-			#endregion
-		}
+            #endregion
+        }
 
 		private void DispatcherTimer_Tick(object sender, EventArgs e)
 		{
-			var info = GetTitleAndArtist();
-
-			if (info == null)
-			{
-				return;
-			}
-
-			TbTitle.Text = info.Item2.TrimStart(' ');
-			TbArtist.Text = info.Item1.TrimEnd(' ');
+		    var status = _spotify.GetStatus();
+		    TbTitle.Text = status.Track.TrackResource.Name;
+		    TbArtist.Text = status.Track.ArtistResource.Name;
 			_rotateTransform.Angle += 2f;
 			ImgIcon.RenderTransform = _rotateTransform;
 
 			CommandManager.InvalidateRequerySuggested();
-		}
-
-		private static string GetSpotifyTrackInfo()
-		{
-			var proc = Process.GetProcessesByName("Spotify").FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.MainWindowTitle));
-
-			if (proc == null)
-			{
-				return "Spotify is not running!";
-			}
-
-			return string.Equals(proc.MainWindowTitle, "Spotify", StringComparison.InvariantCultureIgnoreCase) ? "No track is playing" : proc.MainWindowTitle;
-		}
-
-		private static Tuple<string, string> GetTitleAndArtist()
-		{
-			var trackInfo = GetSpotifyTrackInfo();
-
-			if (!trackInfo.Contains(" - "))
-			{
-				return null;
-			}
-
-			//var info = trackInfo.Split('-');
-			var separator = new[] { " - " };
-			var info = trackInfo.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-			return new Tuple<string, string>(info[0], info[1]);
 		}
 
 		private void Window_Deactivated(object sender, EventArgs e)
