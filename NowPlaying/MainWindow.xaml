@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="Now Playing" Height="80" Width="240" ResizeMode="NoResize" Background="#FF1E1E1E" WindowStyle="None" Deactivated="Window_Deactivated" Icon="Assets/music.png" ShowInTaskbar="False" MouseDown="Window_MouseDown">
 	<Grid>
-		<Image x:Name="ImgIcon" HorizontalAlignment="Left" Height="60" VerticalAlignment="Center" Width="60" Source="Assets/music.png" Margin="10,0,0,0" RenderTransformOrigin="0.5,0.5"/>
-		<TextBlock x:Name="TbTitle" HorizontalAlignment="Right" Margin="0,15,15,0" Text="Title" VerticalAlignment="Top" Foreground="White" Width="140" TextTrimming="CharacterEllipsis" Height="20" FontSize="14"/>
-		<TextBlock x:Name="TbArtist" HorizontalAlignment="Right" Margin="0,0,15,15" VerticalAlignment="Bottom" Foreground="DarkGray" Width="140" Text="Artist" TextTrimming="CharacterEllipsis" Height="20" FontSize="14"/>
-		<tb:TaskbarIcon IconSource="Assets/music.ico" ToolTipText="NowPlaying">
+	    <Image x:Name="ImgCover" HorizontalAlignment="Left" Height="80" VerticalAlignment="Top" Width="80"/>
+	    <TextBlock x:Name="TbTitle" HorizontalAlignment="Right" Margin="0,15,15,0" Text="Title" VerticalAlignment="Top" Foreground="White" Width="130" TextTrimming="CharacterEllipsis" Height="20" FontSize="14"/>
+	    <TextBlock x:Name="TbArtist" HorizontalAlignment="Right" Margin="0,0,15,15" VerticalAlignment="Bottom" Foreground="DarkGray" Width="130" Text="Artist" TextTrimming="CharacterEllipsis" Height="20" FontSize="14"/>
+	    <tb:TaskbarIcon IconSource="Assets/music.ico" ToolTipText="NowPlaying">
 			<tb:TaskbarIcon.ContextMenu>
 				<ContextMenu>
 					<MenuItem Header="Quit" Click="MenuItem_Click" />

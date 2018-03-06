@@ -1,108 +1,94 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
+using System.Windows.Media.Imaging;
 using SpotifyAPI.Local;
+using SpotifyAPI.Local.Enums;
 
 namespace NowPlaying
 {
-	public partial class MainWindow
-	{
-		private readonly RotateTransform _rotateTransform;
-	    private static SpotifyLocalAPI _spotify;
+    public partial class MainWindow
+    {
+        private static SpotifyLocalAPI _spotify;
 
-		public MainWindow()
-		{
-			InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
 
-		    #region Init Spotify
+            #region Init Spotify
 
-		    _spotify = new SpotifyLocalAPI();
+            _spotify = new SpotifyLocalAPI();
 
-		    if (!SpotifyLocalAPI.IsSpotifyInstalled())
-		    {
-		        return;
-		    }
+            if (!SpotifyLocalAPI.IsSpotifyInstalled())
+            {
+                return;
+            }
 
-		    if (!SpotifyLocalAPI.IsSpotifyRunning())
-		    {
-		        return;
-		    }
+            if (!SpotifyLocalAPI.IsSpotifyRunning())
+            {
+                return;
+            }
 
-		    if (!SpotifyLocalAPI.IsSpotifyWebHelperRunning())
-		    {
-		        return;
-		    }
+            if (!SpotifyLocalAPI.IsSpotifyWebHelperRunning())
+            {
+                return;
+            }
 
-		    if (!_spotify.Connect())
-		    {
-		        return;
-		    }
+            if (!_spotify.Connect())
+            {
+                return;
+            }
 
-		    #endregion
+            _spotify.ListenForEvents = true;
+            _spotify.OnTrackChange += OnTrackChange;
 
-            #region IconSpin
+            #endregion
 
-            _rotateTransform = new RotateTransform(0);
+            #region SetWindowPosition
 
-			#endregion
-
-			#region SetWindowPosition
-
-			Left = SystemParameters.PrimaryScreenWidth - Width - 30;
-			Top = SystemParameters.PrimaryScreenHeight - Height - 65; // 40
-
-			#endregion
-
-			#region SetTimer
-
-			var dispatcherTimer = new DispatcherTimer();
-			dispatcherTimer.Tick += DispatcherTimer_Tick;
-			dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-			dispatcherTimer.Start();
+            Left = SystemParameters.PrimaryScreenWidth - Width - 30;
+            Top = SystemParameters.PrimaryScreenHeight - Height - 65; // 40
 
             #endregion
 
             #region SetInitialInfo
 
-		    var status = _spotify.GetStatus();
-		    TbTitle.Text = status.Track.TrackResource.Name;
-		    TbArtist.Text = status.Track.ArtistResource.Name;
-
-            //CommandManager.InvalidateRequerySuggested();
+            var status = _spotify.GetStatus();
+            TbTitle.Text = status.Track.TrackResource.Name;
+            TbArtist.Text = status.Track.ArtistResource.Name;
+            ImgCover.Source = new BitmapImage(new Uri(status.Track.GetAlbumArtUrl(AlbumArtSize.Size160)));
 
             #endregion
         }
 
-		private void DispatcherTimer_Tick(object sender, EventArgs e)
-		{
-		    var status = _spotify.GetStatus();
-		    TbTitle.Text = status.Track.TrackResource.Name;
-		    TbArtist.Text = status.Track.ArtistResource.Name;
-			_rotateTransform.Angle += 2f;
-			ImgIcon.RenderTransform = _rotateTransform;
+        private void OnTrackChange(object sender, TrackChangeEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var status = _spotify.GetStatus();
+                TbTitle.Text = status.Track.TrackResource.Name;
+                TbArtist.Text = status.Track.ArtistResource.Name;
+                ImgCover.Source = new BitmapImage(new Uri(status.Track.GetAlbumArtUrl(AlbumArtSize.Size160)));
+            });
+        }
 
-			CommandManager.InvalidateRequerySuggested();
-		}
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            var window = (Window)sender;
+            window.Topmost = true;
+        }
 
-		private void Window_Deactivated(object sender, EventArgs e)
-		{
-			var window = (Window)sender;
-			window.Topmost = true;
-		}
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
 
-		private void MenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			Application.Current.Shutdown();
-		}
-
-		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			if (e.ChangedButton == MouseButton.Left)
-			{
-				DragMove();
-			}
-		}
-	}
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
+        }
+    }
 }
